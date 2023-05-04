@@ -5,13 +5,18 @@ const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if(req.method === "POST"){
-        return await revisarInfo(req, res)
+        return await revisarDatos(req, res);
     }
     else{
-        res.status(405).end()
+        res.status(405).end();
     }
 }
 
-async function revisarInfo(req: NextApiRequest, res: NextApiResponse) {
-    
+async function revisarDatos(req: NextApiRequest, res: NextApiResponse) {
+    const body = JSON.parse(req.body);
+    try{
+
+    } catch (error){
+
+    }
 }

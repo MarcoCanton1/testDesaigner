@@ -57,9 +57,9 @@ model link {
 model usuario {
   email       String @id @unique
   contrasenia String @db.VarChar(30)
-  idioma      Int
-  estilo      Int
-  font        Int
+  idioma      Int?
+  estilo      Int?
+  font        Int?
   disenio     disenio[]
   coleccion   coleccion[]
 
