@@ -29,7 +29,7 @@ model disenio {
   duenio_id          String  
   duenioPertenece    pertenece @relation(fields: [duenioPertenece_id], references: [id])
   duenioPertenece_id Int
-  fecha              DateTime @db.Date
+  fecha              DateTime @default(now())
   imagen             Bytes    @db.MediumBlob
   mascara            Bytes    @db.MediumBlob
   coleccion          Int
