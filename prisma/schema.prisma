@@ -62,6 +62,7 @@ model usuario {
   font        Int?
   disenio     disenio[]
   coleccion   coleccion[]
+  rol         tipo   @default(USER)
 
 }
 
@@ -69,4 +70,9 @@ model pertenece {
   id        Int @id @default(autoincrement())
   coleccion coleccion[]
   disenio   disenio[]
+}
+
+enum tipo {
+  USER
+  ADMIN
 }
