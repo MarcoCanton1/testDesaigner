@@ -57,12 +57,12 @@ model link {
 model usuario {
   email       String @id @unique
   contrasenia String @db.VarChar(30)
-  idioma      Int?
-  estilo      Int?
-  font        Int?
+  rolUsuario  Int?   @default(0)
+  idioma      Int?   @default(0)
+  estilo      Int?   @default(0)
+  font        Int?   @default(0)
   disenio     disenio[]
   coleccion   coleccion[]
-  rol         tipo   @default(USER)
 
 }
 
@@ -70,9 +70,4 @@ model pertenece {
   id        Int @id @default(autoincrement())
   coleccion coleccion[]
   disenio   disenio[]
-}
-
-enum tipo {
-  USER
-  ADMIN
 }
