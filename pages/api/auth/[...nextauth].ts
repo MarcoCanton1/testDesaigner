@@ -1,12 +1,21 @@
-import NextAuth, {type NextAuthOptions} from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-
+import NextAuth, {type NextAuthOptions} from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/GoogleProvider";
+import DiscordProvider from "next-auth/providers/DiscordProvider";
 
 const authOptions: NextAuthOptions = {
     session: {
         strategy: 'jwt'
     },
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        }),
+        DiscordProvider({
+            clientId: process.env.DISCORD_CLIENT_ID,
+            clientSecret: process.env.DISCORD_CLIENT_SECRET
+        }),
         CredentialsProvider({
             name: 'Credenciales',
             credentials: {
@@ -35,8 +44,9 @@ const authOptions: NextAuthOptions = {
                     return null;
                 }
             }    
-        })
-    ]
+        }),
+    ],
+    secret: process.env.JWT_SECRET
 };
 
 export default NextAuth(authOptions);
