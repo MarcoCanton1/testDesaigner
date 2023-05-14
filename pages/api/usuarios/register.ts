@@ -21,14 +21,14 @@ async function crearUsuario(req: NextApiRequest, res: NextApiResponse){
     if(isNullorUndefined(body.email) || isNullorUndefined(body.contrasenia)){
         res.status(400).json({message: "Algun parametro es null o undefined"});
     }
+    if(isEmpty(body.email) || isEmpty(body.contrasenia)){
+        res.status(400).json({message: "Algun parametro esta vacio"});
+    }
     if(!checkEmail(body.email)){
         res.status(400).json({message: "El email no es valido"});
     }
     if(!checkContrasenia(body.contrasenia)){
         res.status(400).json({message: "La contrasenia no cumple con los parametros requeridos"});
-    }
-    if(isEmpty(body.email) || isEmpty(body.contrasenia)){
-        res.status(400).json({message: "Algun parametro esta vacio"});
     }
     try{
         const newUser = await prisma.usuario.create({

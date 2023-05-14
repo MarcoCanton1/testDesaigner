@@ -4,5 +4,12 @@ DISCORD_CLIENT_ID=1107022526057562162
 DISCORD_CLIENT_SECRET=GpuCK4MpQTLkR4aoC0w9gFlwz1WH0Y3J
 
 NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET= YC9+[25>|a8kG2N"so]r@bZ#{]Rav4
 
-JWT_SECRET=5dc%%2f26e<<1e3#ea5d1a@bfa18*8´+3f35`73b5a=
+JWT_SECRET=5dc%%2f26e<<1e3#ea5d1a@bfa18*8´+3f35`73b5a
+
+cosas para hacer:
+comandos a correr= npm i jsonwebtoken (si es que no esta), npm i cookie
+consultar con nacho el tema de las credentials
+testear el codigo
+
