@@ -59,7 +59,11 @@ async function crearUsuario(req: NextApiRequest, res: NextApiResponse){
                     rolUsuario: 1
                 }
             });
-            if(newUser){
+            console.log(newUser.rolUsuario, newUser);
+            if(newUser && newUser.rolUsuario == 1){
+                return res.status(200).json({message: "Se a creado con exito el perfil de admin 😎🤑 para: " + newUser.email});
+            }
+            else if (newUser) {
                 return res.status(200).json({message: "Se a creado con exito el perfil para: " + newUser.email});
             }
             

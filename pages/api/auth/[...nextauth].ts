@@ -1,11 +1,32 @@
 import NextAuth, {type NextAuthOptions} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/GoogleProvider";
-import DiscordProvider from "next-auth/providers/DiscordProvider";
+import GoogleProvider from "next-auth/providers/google";
+import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
+const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
+
+
+if (!GOOGLE_CLIENT_ID) {
+    throw new Error("Google ID is missing in .env file WTH OMG :O >:(");
+}
+if (!GOOGLE_CLIENT_SECRET) {
+    throw new Error("Google secret is missing in .env file WTH OMG :O >:(");
+}
+if (!DISCORD_CLIENT_ID) {
+    throw new Error("Discord ID is missing in .env file WTH OMG :O >:(");
+}
+if (!DISCORD_CLIENT_SECRET) {
+    throw new Error("Discord secret is missing in .env file WTH OMG :O >:(");
+}
+
+
 
 export default NextAuth ({
     session: {
@@ -14,12 +35,12 @@ export default NextAuth ({
     adapter: PrismaAdapter(prisma),
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            clientId: GOOGLE_CLIENT_ID,
+            clientSecret: GOOGLE_CLIENT_SECRET,
         }),
         DiscordProvider({
-            clientId: process.env.DISCORD_CLIENT_ID,
-            clientSecret: process.env.DISCORD_CLIENT_SECRET
+            clientId: DISCORD_CLIENT_ID,
+            clientSecret: DISCORD_CLIENT_SECRET
         }),
         CredentialsProvider({
             name: 'Credenciales',

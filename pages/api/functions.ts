@@ -1,6 +1,8 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 
+const prisma = new PrismaClient();
+
 function checkEmail(email: string): boolean{
     const emailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     return emailRegEx.test(email);
@@ -19,5 +21,22 @@ function checkContrasenia(contrasenia: string): boolean{
     return contraseniaRegEx.test(contrasenia);
 }
 
-export { checkEmail, isEmpty, isNullorUndefined, checkContrasenia };
+async function userExists(usuario: string, contrasenia: string): Promise<boolean>{
+    try{
+        const existe = await prisma.usuario.findFirst({
+            where: {
+                email: usuario,
+                contrasenia: contrasenia
+            }
+        })
+        if (existe){
+            return true;
+        }
+        return false;
+    } catch {
+        return false;
+    }
+}
+
+export { checkEmail, isEmpty, isNullorUndefined, checkContrasenia, userExists };
 
