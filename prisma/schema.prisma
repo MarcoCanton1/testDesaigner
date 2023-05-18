@@ -12,35 +12,30 @@ model coleccion {
   id                 Int       @id @default(autoincrement())
   nombre             String    @db.VarChar(30)
   favorito           Boolean   @db.Bit(1)
+  disenios           disenio[] 
   duenio             usuario   @relation(fields: [duenio_id], references: [email])
   duenio_id          String     
-  duenioPertenece    pertenece @relation(fields: [duenioPertenece_id], references: [id])
-  duenioPertenece_id Int
 
   
 
-  @@index([duenioPertenece_id])
   @@index([duenio_id])
 }
 
 model disenio {
-  id                 Int      @id @default(autoincrement())
-  duenio             usuario  @relation(fields: [duenio_id], references: [email])
+  id                 Int         @id @default(autoincrement())
+  duenio             usuario     @relation(fields: [duenio_id], references: [email])
   duenio_id          String  
-  duenioPertenece    pertenece @relation(fields: [duenioPertenece_id], references: [id])
-  duenioPertenece_id Int
-  fecha              DateTime @default(now())
-  imagen             Bytes    @db.MediumBlob
-  mascara            Bytes    @db.MediumBlob
-  coleccion          Int
-  ambiente           String   @db.VarChar(20)
+  colecciones        coleccion[]
+  fecha              DateTime    @default(now())
+  imagen             Bytes       @db.MediumBlob
+  mascara            Bytes       @db.MediumBlob
+  ambiente           String      @db.VarChar(20)
   presupuesto        Int
-  estilo             String   @db.VarChar(20)
+  estilo             String      @db.VarChar(20)
   link               link[]
 
 
   @@index([duenio_id])
-  @@index([duenioPertenece_id])
 }
 
 model link {
@@ -64,10 +59,4 @@ model usuario {
   disenio     disenio[]
   coleccion   coleccion[]
 
-}
-
-model pertenece {
-  id        Int @id @default(autoincrement())
-  coleccion coleccion[]
-  disenio   disenio[]
 }

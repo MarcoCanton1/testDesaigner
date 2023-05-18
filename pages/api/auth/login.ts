@@ -33,7 +33,6 @@ async function revisarDatos(req: NextApiRequest, res: NextApiResponse) {
         res.status(400).json({message: "El email no es valido"});
     }
     try{
-        //const respuesta = await prisma.$queryRaw`SELECT contrasenia FROM usuario WHERE email = ${body.email}`;
         const user = await prisma.usuario.findFirst({
             where: {
                 email: body.email,
@@ -43,18 +42,13 @@ async function revisarDatos(req: NextApiRequest, res: NextApiResponse) {
         if(user){
             console.log(user);
             const token = jwt.sign({
-                maxAge: 60 * 15,
-                email: body.email,
-                contrasenia: body.contrasenia
-            }, String(process.env.JWT_SECRET))
-            //falta la creacion de la refresh token
+                email: body.email
+            }, String(process.env.JWT_SECRET), { expiresIn: "15m"})
 
             const refreshToken = jwt.sign({
-                maxAge: 60 * 30,
                 email: body.email,
-                contrasenia: body.contrasenia,
                 token: token
-            },  String(process.env.JWT_SECRET))
+            },  String(process.env.RJWT_SECRET), { expiresIn: "30m"})
 
             const serialized = serialize("DesAIgnerToken", token, {
                 httpOnly: true,

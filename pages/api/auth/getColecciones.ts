@@ -38,11 +38,11 @@ async function colecciones(req: NextApiRequest, res: NextApiResponse) {
                 duenio_id: body.email
             }
         })
+        if(Object.keys(data).length == 0){
+            return res.status(204).json({message: "El usuario no tiene colecciones"});
+        }
         if(data){
             return res.status(200).json(data);
-        }
-        if(!data){
-            return res.status(205).json({message: "El usuario no tiene colecciones"});
         }
         else{
             return res.status(400).json({message: "Algo salio mal"}); //no se si el status esta bien pero bue
