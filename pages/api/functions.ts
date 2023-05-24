@@ -40,11 +40,12 @@ async function userExists(usuario: string, contrasenia: string): Promise<boolean
     }
 }
 
-async function coleccionExists(id: number): Promise<boolean>{
+async function coleccionExists(nombre: string, duenio: string): Promise<boolean>{
     try{
         const existe = await prisma.coleccion.findFirst({
             where: {
-                id: id
+                nombre: nombre,
+                duenio_id: duenio
             }
         })
         if(existe){
@@ -77,7 +78,11 @@ function isInt(variable: any): boolean{
     return Number.isInteger(variable);
 }
 
-function hasAccesToken(token: string): Object{
+function isBoolean(variable: any): boolean{
+    return typeof variable == "boolean";
+}
+
+function hasAccesToken(token: any): Object{
     try {
         const data = jwt.verify(token, String(process.env.JWT_SECRET));
         return data;
@@ -86,33 +91,34 @@ function hasAccesToken(token: string): Object{
     }
 }
 
-function hasRefreshToken(refreshToken: string): boolean{
+function hasRefreshToken(refreshToken: any): Object{
     try{
-        jwt.verify(refreshToken, String(process.env.RJWT_SECRET))
+        const data = jwt.verify(refreshToken, String(process.env.RJWT_SECRET))
+        return data;
     } catch {
-        return false;
+        return {};
     }
-    return true;
 }
 
-function renewTokens(refreshToken: string, email: string, res: NextApiResponse): any{
-    if(!hasRefreshToken(refreshToken)){
-        return null;
+function renewTokens(refreshToken: any, res: NextApiResponse): Object{
+    const data = hasRefreshToken(refreshToken);
+    if(Object.keys(data).length == 0){
+        return {};
     }
 
     const token = jwt.sign({
-        email: email
+        email: Object(data).email
     }, String(process.env.JWT_SECRET), { expiresIn: "15m"})
 
     const refreshTkn = jwt.sign({
-        email: email,
+        email: Object(data).email,
         token: token
     },  String(process.env.RJWT_SECRET), { expiresIn: "30m"})
 
     const serialized = serialize("DesAIgnerToken", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV == "production",
-        sameSite: "strict", //puesto que el back esta concetado directamente con el front, debe ser asi pero es algo que podria cambiar a none
+        sameSite: "strict", 
         maxAge: 60 * 15, 
         path: "/"
     })
@@ -125,10 +131,11 @@ function renewTokens(refreshToken: string, email: string, res: NextApiResponse):
         path: "/"
     })
 
-    res.setHeader("Set-Cookie", serialized);
-    res.setHeader("Set-Cookie", serializedRefresh);
+    res.setHeader("Set-Cookie", [serialized, serializedRefresh]);
+    
+    return data;
 }
 
 export { checkEmail, isEmpty, isNullorUndefined, checkContrasenia, userExists, coleccionExists, coleccionIsFromUser,
-isInt, hasAccesToken, renewTokens };
+isInt, hasAccesToken, renewTokens, isBoolean };
 

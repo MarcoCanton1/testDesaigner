@@ -11,7 +11,7 @@ datasource db {
 model coleccion {
   id                 Int       @id @default(autoincrement())
   nombre             String    @db.VarChar(30)
-  favorito           Boolean   @db.Bit(1)
+  favorito           Boolean?   @db.Bit(1)
   disenios           disenio[] 
   duenio             usuario   @relation(fields: [duenio_id], references: [email])
   duenio_id          String     
@@ -23,7 +23,7 @@ model coleccion {
 
 model disenio {
   id                 Int         @id @default(autoincrement())
-  duenio             usuario     @relation(fields: [duenio_id], references: [email])
+  duenio             usuario     @relation(name:"duenio",  fields: [duenio_id], references: [email])
   duenio_id          String  
   colecciones        coleccion[]
   fecha              DateTime    @default(now())
@@ -33,9 +33,17 @@ model disenio {
   presupuesto        Int
   estilo             String      @db.VarChar(20)
   link               link[]
-
+  permitidos         usuario[]  @relation(name:"permitidos", fields: [])
 
   @@index([duenio_id])
+}
+
+model autorizados {
+  id Int @id @default(autoincrement())
+  usuario String
+  
+
+  @@index([usuario])
 }
 
 model link {
@@ -56,7 +64,7 @@ model usuario {
   idioma      Int?   @default(0)
   estilo      Int?   @default(0)
   font        Int?   @default(0)
-  disenio     disenio[]
+  disenio     disenio[] @relation(name: "disenios")
+  accesibles  disenio[] @relation(name: "diseniosAcessibles")
   coleccion   coleccion[]
-
 }
