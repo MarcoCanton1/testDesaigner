@@ -33,17 +33,16 @@ model disenio {
   presupuesto        Int
   estilo             String      @db.VarChar(20)
   link               link[]
-  permitidos         usuario[]  @relation(name:"permitidos", fields: [])
+  permitidos         autorizados[]
 
   @@index([duenio_id])
 }
 
 model autorizados {
-  id Int @id @default(autoincrement())
-  usuario String
-  
-
-  @@index([usuario])
+  disenio_id       Int
+  disenio          disenio @relation(fields: [disenio_id], references: [id])
+  usuario_email    String
+  usuario          usuario @relation(fields: [usuario_email], references: [email])
 }
 
 model link {
@@ -65,6 +64,6 @@ model usuario {
   estilo      Int?   @default(0)
   font        Int?   @default(0)
   disenio     disenio[] @relation(name: "disenios")
-  accesibles  disenio[] @relation(name: "diseniosAcessibles")
+  accesibles  autorizados[] 
   coleccion   coleccion[]
 }
